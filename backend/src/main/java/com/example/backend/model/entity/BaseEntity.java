@@ -8,8 +8,6 @@ import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.validation.ObjectError;
 import org.hibernate.proxy.HibernateProxy;
-
-
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -29,30 +27,14 @@ public abstract class BaseEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @LastModifiedDate
-    @Column(name = "updated_at", nullable = false, updatable = true)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     @CreatedBy
-    @Column(name = "created_by", nullable = false, updatable = false)
+    @Column(name = "created_by")
     private String createdBy;
 
     @LastModifiedBy
-    @Column(name = "updated_by", nullable = false, updatable = true)
+    @Column(name = "updated_by")
     private String updatedBy;
-    @Override
-    public final boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null) return false;
-        if (!effectiveClass(o).equals(effectiveClass(this))) return false;
-        String otherId = ((BaseEntity) o).getId();
-        return id != null && id.equals(otherId);
-    }
-    @Override
-    public final int hashCode(){
-        return id != null ?  id.hashCode() : effectiveClass(this).hashCode();
-    }
-    private  static  Class<?> effectiveClass(Object entity){
-        return entity instanceof HibernateProxy proxy
-                ? proxy.getHibernateLazyInitializer().getImplementation().getClass()
-                : entity.getClass();
-    }
+
 }
